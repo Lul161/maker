@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>我的创客日志</title>
+    <style>
+        body { font-family: Arial; max-width: 1000px; margin: auto; padding: 20px; background: #f5f5f5; }
+        h1 { text-align: center; color: #2c3e50; }
+        section { background: white; margin: 20px 0; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h2 { color: #3498db; border-left: 5px solid #3498db; padding-left: 15px; }
+        img { max-width: 100%; height: auto; border-radius: 5px; margin: 10px 0; }
+        pre { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: monospace; }
+        .nav { position: sticky; top: 0; background: #2c3e50; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
+        .nav a { color: white; margin: 0 10px; text-decoration: none; }
+        .nav a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>📓 我的创客学习日志</h1>
+    
+    <div class="nav">
+        <a href="#intro">个人简介</a> | <a href="#maker">什么是创客</a> | <a href="#git">Git</a> | <a href="#3d">3D设计</a> | <a href="#solder">电子焊接</a> | <a href="#embed">嵌入式计算</a> | <a href="#mid">中期项目</a> | <a href="#pcb">PCB设计</a> | <a href="#design">设计思维</a> | <a href="#final">期末项目</a>
+    </div>
+
+    <!-- 1. 个人简介 -->
+    <section id="intro">
+        <h2>1. 个人简介</h2>
+        <p><strong>姓名：</strong>张三（替换成你的名字）</p>
+        <p><strong>学校/专业：</strong>______大学 计算机科学与技术</p>
+        <p><strong>兴趣爱好：</strong>编程、动手制作、3D打印</p>
+        <p><strong>学习目标：</strong>通过这门课程，掌握创客必备的技能，包括3D设计、电子焊接、嵌入式开发等，最终完成一个有意义的创新项目。</p>
+        <!-- TODO: 放你的照片，把照片放到 images/ 文件夹，取消下面的注释 -->
+        <!-- <img src="../images/avatar.jpg" alt="我的照片"> -->
+    </section>
+
+    <!-- 2. 什么是创客 -->
+    <section id="maker">
+        <h2>2. 什么是创客</h2>
+        <p><strong>创客（Maker）</strong> 是指那些勇于创新、动手实践的人。他们不满足于现成的产品，而是通过自己的努力，将想法变成现实。</p>
+        <p>创客精神包括：</p>
+        <ul>
+            <li>🔧 动手实践：把想法做出来</li>
+            <li>🤝 分享协作：开源精神，与他人分享成果</li>
+            <li>💡 持续学习：不断探索新技术</li>
+            <li>⚡ 解决问题：用技术解决实际问题</li>
+        </ul>
+        <p>我的创客座右铭：<em>"Make it happen!"</em></p>
+    </section>
+
+    <!-- 3. Git -->
+    <section id="git">
+        <h2>3. Git 学习记录</h2>
+        <p>Git 是一个分布式版本控制系统，用于追踪文件的变化。</p>
+        <p><strong>我学会的常用命令：</strong></p>
+        <pre><code>git init              # 初始化本地仓库
+git add .             # 添加所有文件到暂存区
+git commit -m "描述"   # 提交到本地仓库
+git push              # 推送到远程仓库
+git pull              # 从远程仓库拉取更新</code></pre>
+        <p><strong>我的Git配置：</strong></p>
+        <pre><code>git config --global user.name "你的用户名"
+git config --global user.email "你的邮箱"</code></pre>
+        <!-- TODO: 截图你的 Git 提交记录，放到 images/ 文件夹 -->
+    </section>
+
+    <!-- 4. 3D设计、3D打印 -->
+    <section id="3d">
+        <h2>4. 3D设计 & 3D打印</h2>
+        <p><strong>学习软件：</strong>Fusion 360 / Tinkercad</p>
+        <p><strong>练习内容：</strong>设计了一个手机支架/钥匙扣/某个小零件</p>
+        <p><strong>设计思路：</strong>先画草图，然后拉伸成实体，最后倒角美化。</p>
+        <!-- TODO: 放3D模型截图 -->
+        <!-- <img src="../images/3d-model.png" alt="3D模型截图"> -->
+        <!-- TODO: 放STL文件下载链接 -->
+        <!-- <p><a href="../files/model.stl">📥 下载STL文件</a></p> -->
+    </section>
+
+    <!-- 5. 电子焊接 -->
+    <section id="solder">
+        <h2>5. 电子焊接</h2>
+        <p><strong>焊接练习：</strong>LED闪烁电路 / 温度传感器模块</p>
+        <p><strong>焊接步骤：</strong></p>
+        <ol>
+            <li>准备工具：电烙铁、焊锡、松香、助焊剂</li>
+            <li>给电烙铁预热（约300°C）</li>
+            <li>先给焊盘和元件脚上锡</li>
+            <li>将元件固定在电路板上</li>
+            <li>焊接每个焊点，约2-3秒</li>
+            <li>检查有无虚焊、短路</li>
+        </ol>
+        <!-- TODO: 放焊接过程或成果照片 -->
+        <!-- <img src="../images/solder-result.jpg" alt="焊接成果"> -->
+    </section>
+
+    <!-- 6. 嵌入式计算 -->
+    <section id="embed">
+        <h2>6. 嵌入式计算</h2>
+        <p><strong>开发板：</strong>Arduino Uno / ESP32</p>
+        <p><strong>练习项目：</strong>舵机控制 / 超声波测距 / LED灯带控制</p>
+        <p><strong>示例代码：</strong>控制舵机摆动</p>
+        <pre><code>#include &lt;Servo.h&gt;
+Servo myServo;
+
+void setup() {
+    myServo.attach(9);   // 信号线接数字引脚9
+}
+
+void loop() {
+    myServo.write(0);    // 转到0度
+    delay(1000);
+    myServo.write(90);   // 转到90度
+    delay(1000);
+    myServo.write(180);  // 转到180度
+    delay(1000);
+}</code></pre>
+        <!-- TODO: 放电路连接照片或演示视频 -->
+    </section>
+
+    <!-- 7. 中期创客项目 -->
+    <section id="mid">
+        <h2>7. 中期创客项目</h2>
+        <p><strong>项目名称：</strong>智能垃圾桶 / 自动浇花系统 / 等等</p>
+        <p><strong>团队成员：</strong>张三、李四、王五</p>
+        <p><strong>项目介绍：</strong>做一款能...的产品，解决了...问题。</p>
+        <p><strong>我的分工：</strong>负责代码编写和电路连接</p>
+        <p><strong>制作过程：</strong></p>
+        <ol>
+            <li>需求分析：确定功能需求</li>
+            <li>方案设计：选择传感器和执行器</li>
+            <li>原型搭建：用面包板测试电路</li>
+            <li>代码编写：实现核心功能</li>
+            <li>外壳设计：3D打印外壳</li>
+            <li>整机调试：解决bug</li>
+        </ol>
+        <p><strong>遇到的问题及解决：</strong>舵机抖动 → 外接独立电源供电，问题解决。</p>
+        <!-- TODO: 放项目照片或演示视频 -->
+    </section>
+
+    <!-- 8. PCB设计 -->
+    <section id="pcb">
+        <h2>8. PCB设计</h2>
+        <p><strong>设计软件：</strong>立创EDA / Altium Designer</p>
+        <p><strong>练习内容：</strong>设计了一个LED灯板 / 传感器转接板</p>
+        <p><strong>PCB设计流程：</strong></p>
+        <ol>
+            <li>绘制原理图，连接元件引脚</li>
+            <li>检查电气规则（ERC）</li>
+            <li>导入到PCB设计界面</li>
+            <li>布局元件，按功能分区</li>
+            <li>布线（先走电源线，再走信号线）</li>
+            <li>添加泪滴、铺铜</li>
+            <li>生成Gerber文件，发厂家打样</li>
+        </ol>
+        <!-- TODO: 放原理图和PCB设计截图 -->
+        <!-- <img src="../images/pcb-schematic.png" alt="原理图"> -->
+        <!-- <img src="../images/pcb-layout.png" alt="PCB布局"> -->
+    </section>
+
+    <!-- 9. 设计思维 -->
+    <section id="design">
+        <h2>9. 设计思维</h2>
+        <p><strong>设计思维的五个阶段：</strong></p>
+        <ol>
+            <li><strong>共情（Empathize）：</strong>观察用户，了解需求</li>
+            <li><strong>定义（Define）：</strong>明确要解决的问题</li>
+            <li><strong>构思（Ideate）：</strong>头脑风暴，产生创意</li>
+            <li><strong>原型（Prototype）：</strong>快速做出原型</li>
+            <li><strong>测试（Test）：</strong>让用户测试，收集反馈迭代</li>
+        </ol>
+        <p><strong>我的练习：</strong>针对“宿舍生活不方便”的问题，进行用户访谈，发现“床上关灯不方便”的需求，设计了一个床头灯控制器。</p>
+        <!-- TODO: 放用户旅程地图或头脑风暴照片 -->
+    </section>
+
+    <!-- 10. 期末创新项目 -->
+    <section id="final">
+        <h2>10. 期末创新项目</h2>
+        <p><strong>项目名称：</strong>______（你的项目名称）</p>
+        <p><strong>团队成员：</strong>张三、李四、王五</p>
+        <p><strong>项目背景：</strong>为什么要做这个项目？解决了什么痛点？</p>
+        <p><strong>功能介绍：</strong></p>
+        <ul>
+            <li>功能1：...</li>
+            <li>功能2：...</li>
+            <li>功能3：...</li>
+        </ul>
+        <p><strong>技术方案：</strong></p>
+        <ul>
+            <li>主控芯片：ESP32 / Arduino / STM32</li>
+            <li>传感器：______</li>
+            <li>执行器：______</li>
+            <li>通信方式：WiFi/蓝牙/串口</li>
+        </ul>
+        <p><strong>成果展示：</strong></p>
+        <!-- TODO: 放项目成品照片和演示视频 -->
+        <p><strong>项目总结与反思：</strong>做得好的地方、可以改进的地方。</p>
+    </section>
+
+    <footer style="text-align: center; padding: 20px; color: #7f8c8d;">
+        <p>📅 最后更新：2026年5月30日 | 持续更新中...</p>
+    </footer>
+</body>
+</html>

@@ -1,203 +1,1147 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>我的创客日志</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创客学习日志 | 李露</title>
     <style>
-        body { font-family: Arial; max-width: 1000px; margin: auto; padding: 20px; background: #f5f5f5; }
-        h1 { text-align: center; color: #2c3e50; }
-        section { background: white; margin: 20px 0; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h2 { color: #3498db; border-left: 5px solid #3498db; padding-left: 15px; }
-        img { max-width: 100%; height: auto; border-radius: 5px; margin: 10px 0; }
-        pre { background: #2c3e50; color: #ecf0f1; padding: 15px; border-radius: 5px; overflow-x: auto; }
-        code { font-family: monospace; }
-        .nav { position: sticky; top: 0; background: #2c3e50; padding: 10px; border-radius: 5px; margin-bottom: 20px; }
-        .nav a { color: white; margin: 0 10px; text-decoration: none; }
-        .nav a:hover { text-decoration: underline; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --accent: #6366f1;
+            --accent-light: #818cf8;
+            --accent-dark: #312e81;
+            --text: #1a2a3a;
+            --nav-h: 64px;
+            --transition: 0.65s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background: #eef2ff;
+            color: var(--text);
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(99,102,241,0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 75%, rgba(236,72,153,0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(34,211,238,0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-h);
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            font-size: 15px;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            white-space: nowrap;
+            margin-right: 12px;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 4px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            flex: 1;
+            justify-content: center;
+            padding: 4px 0;
+        }
+
+        .nav-links::-webkit-scrollbar { display: none; }
+
+        .navbar a {
+            color: #475569;
+            text-decoration: none;
+            padding: 7px 14px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .navbar a:hover,
+        .navbar a.active {
+            background: var(--accent);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 8px;
+            margin-left: 12px;
+        }
+
+        .nav-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 50%;
+            background: #eef2ff;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.08);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        /* 翻页容器 */
+        .book-viewport {
+            position: fixed;
+            top: var(--nav-h);
+            left: 0;
+            right: 0;
+            bottom: 0;
+            perspective: 1400px;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .pages-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+        }
+
+        .page {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(60px) rotateY(-8deg) scale(0.96);
+            transform-origin: left center;
+            transition:
+                opacity var(--transition),
+                transform var(--transition);
+            will-change: transform, opacity;
+        }
+
+        .page.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(0) rotateY(0) scale(1);
+            z-index: 2;
+        }
+
+        .page.leaving-left {
+            opacity: 0;
+            transform: translateX(-80px) rotateY(10deg) scale(0.94);
+            z-index: 1;
+        }
+
+        .page.leaving-right {
+            opacity: 0;
+            transform: translateX(80px) rotateY(-10deg) scale(0.94);
+            z-index: 1;
+        }
+
+        .page.entering-from-right {
+            transform: translateX(80px) rotateY(-8deg) scale(0.96);
+        }
+
+        .page.entering-from-left {
+            transform: translateX(-80px) rotateY(8deg) scale(0.96);
+        }
+
+        /* 页面内容卡片 */
+        .page-inner {
+            width: 100%;
+            max-width: 900px;
+            max-height: calc(100vh - var(--nav-h) - 80px);
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.97);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 32px 36px;
+            box-shadow:
+                0 20px 50px rgba(0,0,0,0.08),
+                0 0 0 1px rgba(255,255,255,0.6);
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .page-inner::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 28px 28px 0 0;
+            background: var(--section-accent, linear-gradient(90deg, #6366f1, #818cf8));
+        }
+
+        .page[data-index="1"]  { --section-accent: linear-gradient(90deg, #6366f1, #a78bfa); }
+        .page[data-index="2"]  { --section-accent: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .page[data-index="3"]  { --section-accent: linear-gradient(90deg, #10b981, #34d399); }
+        .page[data-index="4"]  { --section-accent: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        .page[data-index="5"]  { --section-accent: linear-gradient(90deg, #ef4444, #f87171); }
+        .page[data-index="6"]  { --section-accent: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+        .page[data-index="7"]  { --section-accent: linear-gradient(90deg, #ec4899, #f472b6); }
+        .page[data-index="8"]  { --section-accent: linear-gradient(90deg, #14b8a6, #2dd4bf); }
+        .page[data-index="9"]  { --section-accent: linear-gradient(90deg, #f97316, #fb923c); }
+        .page[data-index="10"] { --section-accent: linear-gradient(90deg, #6366f1, #ec4899); }
+
+        .page-inner::-webkit-scrollbar { width: 6px; }
+        .page-inner::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+
+        /* Hero 页 */
+        .page-hero {
+            background: none;
+        }
+
+        .page-hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, #667eea 0%, #764ba2 35%, #f093fb 70%, #f5576c 100%);
+            background-size: 300% 300%;
+            animation: gradientShift 12s ease infinite;
+            z-index: 0;
+        }
+
+        .page-hero::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 30%, rgba(255,255,255,0.18) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.12) 0%, transparent 35%);
+            z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero-floats {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .hero-floats span {
+            position: absolute;
+            font-size: clamp(1.4rem, 3vw, 2.2rem);
+            opacity: 0.35;
+            animation: floatIcon 6s ease-in-out infinite;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.15));
+        }
+
+        .hero-floats span:nth-child(1) { top: 12%; left: 8%;  animation-delay: 0s;    animation-duration: 7s; }
+        .hero-floats span:nth-child(2) { top: 18%; right: 10%; animation-delay: 1s;    animation-duration: 8s; }
+        .hero-floats span:nth-child(3) { bottom: 22%; left: 12%; animation-delay: 2s; animation-duration: 6s; }
+        .hero-floats span:nth-child(4) { bottom: 15%; right: 8%; animation-delay: 0.5s; animation-duration: 9s; }
+        .hero-floats span:nth-child(5) { top: 45%; left: 5%;  animation-delay: 1.5s;  animation-duration: 7.5s; }
+        .hero-floats span:nth-child(6) { top: 40%; right: 5%; animation-delay: 2.5s;  animation-duration: 6.5s; }
+
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-18px) rotate(8deg); }
+        }
+
+        .page-hero .page-inner {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            color: #1e293b;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 460px;
+            max-height: none;
+            overflow: visible;
+            box-shadow:
+                0 32px 64px -16px rgba(99,102,241,0.35),
+                0 0 0 1px rgba(255,255,255,0.8);
+            border: 1px solid rgba(255,255,255,0.6);
+            padding: 48px 40px;
+        }
+
+        .page-hero .page-inner::before {
+            display: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            background: linear-gradient(135deg, #eef2ff, #fce7f3);
+            border: 1px solid rgba(99,102,241,0.2);
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 20px;
+            animation: fadeUp 0.7s ease both;
+        }
+
+        .hero-badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            animation: pulse 2s ease infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.85); }
+        }
+
+        .page-hero h1 {
+            font-size: clamp(2rem, 5vw, 3.4rem);
+            margin-bottom: 14px;
+            letter-spacing: -0.5px;
+            animation: fadeUp 0.8s 0.1s ease both;
+            background: linear-gradient(135deg, #312e81 0%, #6366f1 50%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .page-hero .hero-subtitle {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: #475569;
+            font-weight: 500;
+            animation: fadeUp 0.8s 0.2s ease both;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 28px;
+            animation: fadeUp 0.8s 0.3s ease both;
+        }
+
+        .hero-tag {
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            transition: all 0.25s;
+        }
+
+        .hero-tag:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(99,102,241,0.15);
+            border-color: #c7d2fe;
+            background: #eef2ff;
+        }
+
+        .hero-tag:nth-child(1) { border-left: 3px solid #6366f1; }
+        .hero-tag:nth-child(2) { border-left: 3px solid #f59e0b; }
+        .hero-tag:nth-child(3) { border-left: 3px solid #ef4444; }
+        .hero-tag:nth-child(4) { border-left: 3px solid #10b981; }
+        .hero-tag:nth-child(5) { border-left: 3px solid #ec4899; }
+
+        .hero-start-btn {
+            margin-top: 32px;
+            padding: 14px 32px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 24px rgba(99,102,241,0.4);
+            transition: all 0.3s;
+            animation: fadeUp 0.8s 0.4s ease both;
+        }
+
+        .hero-start-btn:hover {
+            transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 12px 32px rgba(99,102,241,0.5);
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        }
+
+        .hero-start-btn .arrow {
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+
+        .hero-start-btn:hover .arrow {
+            transform: translateX(4px);
+        }
+
+        .hero-hint {
+            margin-top: 24px;
+            font-size: 13px;
+            color: #94a3b8;
+            animation: fadeUp 0.8s 0.5s ease both;
+        }
+
+        .hero-hint kbd {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            margin: 0 2px;
+            color: #64748b;
+            font-family: inherit;
+            font-size: 12px;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 内容样式 */
+        .page-inner h2 {
+            font-size: 1.85rem;
+            border-left: 6px solid transparent;
+            border-image: var(--section-accent, linear-gradient(180deg, #6366f1, #818cf8)) 1;
+            padding-left: 18px;
+            margin-bottom: 22px;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-inner h2::before {
+            content: "✨";
+            font-size: 1.5rem;
+        }
+
+        .page-inner h3 {
+            font-size: 1.25rem;
+            margin: 20px 0 10px;
+            color: #1e4a76;
+        }
+
+        .page-inner p {
+            line-height: 1.7;
+            margin: 12px 0;
+            color: #2c3e44;
+        }
+
+        ul, ol {
+            margin: 12px 0 12px 28px;
+            line-height: 1.7;
+        }
+
+        li { margin: 8px 0; }
+
+        .img-fluid {
+            max-width: 100%;
+            border-radius: 20px;
+            margin: 16px 0;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.25s;
+            cursor: zoom-in;
+        }
+
+        .img-fluid:hover {
+            transform: scale(1.02);
+        }
+
+        .img-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin: 16px 0;
+        }
+
+        .img-row img {
+            flex: 1;
+            min-width: 160px;
+            border-radius: 16px;
+        }
+
+        pre {
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 16px;
+            border-radius: 16px;
+            overflow-x: auto;
+            font-size: 13px;
+            margin: 16px 0;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+
+        .btn-download {
+            display: inline-block;
+            background: linear-gradient(95deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 10px 22px;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+            margin: 10px 0;
+        }
+
+        .btn-download:hover {
+            transform: scale(1.04);
+            box-shadow: 0 8px 18px rgba(99,102,241,0.35);
+        }
+
+        video {
+            border-radius: 16px;
+            margin: 14px 0;
+            max-width: 100%;
+        }
+
+        /* 底部进度条 */
+        .page-footer-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 56px;
+            background: rgba(255,255,255,0.9);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            z-index: 1000;
+        }
+
+        .page-indicator {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .page-indicator span {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .progress-dots {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.3s;
+        }
+
+        .dot.active {
+            width: 28px;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #6366f1, #ec4899);
+        }
+
+        .dot:hover:not(.active) {
+            background: #94a3b8;
+            transform: scale(1.2);
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        /* 图片灯箱 */
+        .lightbox {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .lightbox.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .lightbox img {
+            max-width: 92vw;
+            max-height: 88vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            background: rgba(255,255,255,0.15);
+            border: none;
+            color: white;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* 翻页过渡遮罩 */
+        .page-flash {
+            position: fixed;
+            inset: 0;
+            background: white;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 999;
+            transition: opacity 0.15s;
+        }
+
+        .page-flash.flash {
+            opacity: 0.08;
+        }
+
+        @media (max-width: 768px) {
+            .nav-brand { display: none; }
+            .navbar { padding: 0 12px; }
+            .navbar a { padding: 6px 10px; font-size: 11px; }
+            .page { padding: 12px; }
+            .page-inner { padding: 22px 20px; border-radius: 20px; }
+            .page-footer-bar { padding: 0 14px; }
+            .footer-text { display: none; }
+        }
     </style>
 </head>
 <body>
-    <h1>📓 我的创客学习日志</h1>
-    
-    <div class="nav">
-        <a href="#intro">个人简介</a> | <a href="#maker">什么是创客</a> | <a href="#git">Git</a> | <a href="#3d">3D设计</a> | <a href="#solder">电子焊接</a> | <a href="#embed">嵌入式计算</a> | <a href="#mid">中期项目</a> | <a href="#pcb">PCB设计</a> | <a href="#design">设计思维</a> | <a href="#final">期末项目</a>
+
+<nav class="navbar">
+    <div class="nav-brand">📓 创客日志</div>
+    <div class="nav-links" id="navLinks">
+        <a href="#" data-page="0">🏠 首页</a>
+        <a href="#" data-page="1">📖 个人简介</a>
+        <a href="#" data-page="2">💡 什么是创客</a>
+        <a href="#" data-page="3">📦 Git</a>
+        <a href="#" data-page="4">🖨️ 3D设计</a>
+        <a href="#" data-page="5">🔧 电子焊接</a>
+        <a href="#" data-page="6">⚡ 嵌入式计算</a>
+        <a href="#" data-page="7">🎯 中期项目</a>
+        <a href="#" data-page="8">📟 PCB设计</a>
+        <a href="#" data-page="9">🧠 设计思维</a>
+        <a href="#" data-page="10">🚀 期末项目</a>
     </div>
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" title="上一页">‹</button>
+        <button class="nav-btn" id="nextBtn" title="下一页">›</button>
+    </div>
+</nav>
 
-    <!-- 1. 个人简介 -->
-    <section id="intro">
-        <h2>1. 个人简介</h2>
-        <p><strong>姓名：</strong>张三（替换成你的名字）</p>
-        <p><strong>学校/专业：</strong>______大学 计算机科学与技术</p>
-        <p><strong>兴趣爱好：</strong>编程、动手制作、3D打印</p>
-        <p><strong>学习目标：</strong>通过这门课程，掌握创客必备的技能，包括3D设计、电子焊接、嵌入式开发等，最终完成一个有意义的创新项目。</p>
-        <!-- TODO: 放你的照片，把照片放到 images/ 文件夹，取消下面的注释 -->
-        <!-- <img src="../images/avatar.jpg" alt="我的照片"> -->
-    </section>
+<div class="book-viewport">
+    <div class="pages-track" id="pagesTrack">
 
-    <!-- 2. 什么是创客 -->
-    <section id="maker">
-        <h2>2. 什么是创客</h2>
-        <p><strong>创客（Maker）</strong> 是指那些勇于创新、动手实践的人。他们不满足于现成的产品，而是通过自己的努力，将想法变成现实。</p>
-        <p>创客精神包括：</p>
-        <ul>
-            <li>🔧 动手实践：把想法做出来</li>
-            <li>🤝 分享协作：开源精神，与他人分享成果</li>
-            <li>💡 持续学习：不断探索新技术</li>
-            <li>⚡ 解决问题：用技术解决实际问题</li>
-        </ul>
-        <p>我的创客座右铭：<em>"Make it happen!"</em></p>
-    </section>
+        <!-- 0. 封面 -->
+        <section class="page page-hero active" data-index="0">
+            <div class="hero-floats" aria-hidden="true">
+                <span>🔧</span><span>💡</span><span>🖨️</span>
+                <span>⚡</span><span>🔩</span><span>📟</span>
+            </div>
+            <div class="page-inner">
+                <div class="hero-badge"><span class="hero-badge-dot"></span> 李露 · 计算机科学与技术</div>
+                <h1>📓 创客学习日志</h1>
+                <p class="hero-subtitle">从代码到实物 | 动手创造 | 持续迭代</p>
+                <div class="hero-tags">
+                    <span class="hero-tag">🖨️ 3D 打印</span>
+                    <span class="hero-tag">🔧 电子焊接</span>
+                    <span class="hero-tag">⚡ ESP32</span>
+                    <span class="hero-tag">📟 PCB 设计</span>
+                    <span class="hero-tag">🧠 设计思维</span>
+                </div>
+                <button class="hero-start-btn" id="heroStartBtn">开始<span class="arrow">→</span></button>
+                <p class="hero-hint">按 <kbd>→</kbd> 或点击右下角圆点翻页 </p>
+            </div>
+        </section>
 
-    <!-- 3. Git -->
-    <section id="git">
-        <h2>3. Git 学习记录</h2>
-        <p>Git 是一个分布式版本控制系统，用于追踪文件的变化。</p>
-        <p><strong>我学会的常用命令：</strong></p>
-        <pre><code>git init              # 初始化本地仓库
+        <!-- 1. 个人简介 -->
+        <section class="page" data-index="1">
+            <div class="page-inner">
+                <h2>1. 个人简介</h2>
+                <p><strong>姓名：</strong>李露</p>
+                <p><strong>专业：</strong>计算机科学与技术</p>
+                <p><strong>兴趣爱好：</strong>编程、动手制作、3D打印</p>
+                <p><strong>学习目标：</strong>通过这门课程，掌握创客必备的技能，包括3D设计、电子焊接、嵌入式开发等，完成一个有意义的创新项目。</p>
+            </div>
+        </section>
+
+        <!-- 2. 什么是创客 -->
+        <section class="page" data-index="2">
+            <div class="page-inner">
+                <h2>2. 什么是创客</h2>
+                <p><strong>创客（Maker）</strong> 是指那些勇于创新、动手实践的人。他们不满足于现成的产品，而是通过自己的努力，将想法变成现实。</p>
+                <p>创客精神包括：</p>
+                <ul>
+                    <li>🔧 动手实践：把想法做出来</li>
+                    <li>🤝 分享协作：开源精神，与他人分享成果</li>
+                    <li>💡 持续学习：不断探索新技术</li>
+                    <li>⚡ 解决问题：用技术解决实际问题</li>
+                </ul>
+                <p>我的创客座右铭：<em>"Just do it! Make it happen!"</em></p>
+            </div>
+        </section>
+
+        <!-- 3. Git -->
+        <section class="page" data-index="3">
+            <div class="page-inner">
+                <h2>3. Git 学习记录</h2>
+                <p>Git 是一个分布式版本控制系统，用于追踪文件的变化。</p>
+                <p><strong>我学会的常用命令：</strong></p>
+                <pre><code>git init              # 初始化本地仓库
 git add .             # 添加所有文件到暂存区
 git commit -m "描述"   # 提交到本地仓库
 git push              # 推送到远程仓库
 git pull              # 从远程仓库拉取更新</code></pre>
-        <p><strong>我的Git配置：</strong></p>
-        <pre><code>git config --global user.name "你的用户名"
+                <p><strong>我的Git配置：</strong></p>
+                <pre><code>git config --global user.name "你的用户名"
 git config --global user.email "你的邮箱"</code></pre>
-        <!-- TODO: 截图你的 Git 提交记录，放到 images/ 文件夹 -->
-    </section>
+            </div>
+        </section>
 
-    <!-- 4. 3D设计、3D打印 -->
-    <section id="3d">
-        <h2>4. 3D设计 & 3D打印</h2>
-        <p><strong>学习软件：</strong>Fusion 360 / Tinkercad</p>
-        <p><strong>练习内容：</strong>设计了一个手机支架/钥匙扣/某个小零件</p>
-        <p><strong>设计思路：</strong>先画草图，然后拉伸成实体，最后倒角美化。</p>
-        <!-- TODO: 放3D模型截图 -->
-        <!-- <img src="../images/3d-model.png" alt="3D模型截图"> -->
-        <!-- TODO: 放STL文件下载链接 -->
-        <!-- <p><a href="../files/model.stl">📥 下载STL文件</a></p> -->
-    </section>
+        <!-- 4. 3D设计 -->
+        <section class="page" data-index="4">
+            <div class="page-inner">
+                <h2>4. 3D设计 & 3D打印</h2>
+                <p><strong>学习软件：</strong>SolidWorks</p>
+                <p><strong>练习内容：</strong>设计了一个带有学校元素小建筑</p>
+                <p><strong>设计思路：</strong>先画草图，然后拉伸成实体，最后倒角美化。</p>
+                <img src="../images/3D打印模型.png" alt="3D模型截图" class="img-fluid">
+                <p><a href="../files/零件11.STL" class="btn-download">📥 下载STL文件</a></p>
+                <p><strong>实物照片：</strong></p>
+                <img src="../images/3D打印实物.jpg" alt="3D打印实物" class="img-fluid">
+                <p><strong>踩坑记录：</strong>刚开始用SolidWorks不熟练，草图老是过定义，后来看了B站教程，学会了用"完全定义草图"这个功能。打印的时候也翻车了一次，支撑太紧拆不下来，后来把支撑间距调大了就好了。</p>
+            </div>
+        </section>
 
-    <!-- 5. 电子焊接 -->
-    <section id="solder">
-        <h2>5. 电子焊接</h2>
-        <p><strong>焊接练习：</strong>LED闪烁电路 / 温度传感器模块</p>
-        <p><strong>焊接步骤：</strong></p>
-        <ol>
-            <li>准备工具：电烙铁、焊锡、松香、助焊剂</li>
-            <li>给电烙铁预热（约300°C）</li>
-            <li>先给焊盘和元件脚上锡</li>
-            <li>将元件固定在电路板上</li>
-            <li>焊接每个焊点，约2-3秒</li>
-            <li>检查有无虚焊、短路</li>
-        </ol>
-        <!-- TODO: 放焊接过程或成果照片 -->
-        <!-- <img src="../images/solder-result.jpg" alt="焊接成果"> -->
-    </section>
+        <!-- 5. 电子焊接 -->
+        <section class="page" data-index="5">
+            <div class="page-inner">
+                <h2>5. 电子焊接</h2>
+                <p><strong>焊接练习：</strong>LED闪烁电路</p>
+                <img src="../images/焊接练习.jpg" alt="LED闪烁电路焊接成果" class="img-fluid">
+                <p><strong>焊接步骤：</strong></p>
+                <ol>
+                    <li>准备工具：电烙铁、焊锡、松香、助焊剂</li>
+                    <li>给电烙铁预热（约300°C）</li>
+                    <li>先给焊盘和元件脚上锡</li>
+                    <li>将元件固定在电路板上</li>
+                    <li>焊接每个焊点，约2-3秒</li>
+                    <li>检查有无虚焊、短路</li>
+                </ol>
+                <p><strong>💡 踩坑记录：</strong></p>
+                <p>第一次焊接的时候，烙铁头不上锡，焊点跟泥巴一样糊在一起。后来才知道新烙铁要先"吃锡"，拿焊锡丝在烙铁头上裹一层。焊的时候先加热焊盘和引脚，再把焊锡丝凑上去，大概2秒就融化了，焊点又亮又圆。</p>
+                <p>还有一个坑：焊LED的时候没看正负极，焊完不亮，拆下来重新焊才搞定。后来养成习惯，焊之前用万用表量一下，或者找板子上的丝印标记。</p>
+            </div>
+        </section>
 
-    <!-- 6. 嵌入式计算 -->
-    <section id="embed">
-        <h2>6. 嵌入式计算</h2>
-        <p><strong>开发板：</strong>Arduino Uno / ESP32</p>
-        <p><strong>练习项目：</strong>舵机控制 / 超声波测距 / LED灯带控制</p>
-        <p><strong>示例代码：</strong>控制舵机摆动</p>
-        <pre><code>#include &lt;Servo.h&gt;
+        <!-- 6. 嵌入式计算 -->
+        <section class="page" data-index="6">
+            <div class="page-inner">
+                <h2>6. 嵌入式计算</h2>
+                <p><strong>开发板：</strong> ESP32</p>
+                <p><strong>练习项目：</strong>舵机控制 / LED灯控制</p>
+                <p><strong>示例代码：</strong>控制舵机摆动</p>
+                <pre><code>#include &lt;Servo.h&gt;
 Servo myServo;
 
 void setup() {
-    myServo.attach(9);   // 信号线接数字引脚9
+    myServo.attach(9);
 }
 
 void loop() {
-    myServo.write(0);    // 转到0度
+    myServo.write(0);
     delay(1000);
-    myServo.write(90);   // 转到90度
+    myServo.write(90);
     delay(1000);
-    myServo.write(180);  // 转到180度
+    myServo.write(180);
     delay(1000);
 }</code></pre>
-        <!-- TODO: 放电路连接照片或演示视频 -->
-    </section>
+                <video width="100%" controls>
+                    <source src="../videos/舵机控制.mp4" type="video/mp4">
+                </video>
+                <p><strong>💡 踩坑记录：</strong></p>
+                <p>焊接的时候手抖，烙铁在开发板上多停了两秒，直接把焊盘烫掉了。板子上的铜皮翘起来，再也焊不上。后来上网查才知道，烙铁温度不能太高（350℃左右就行），每个焊点控制在2-3秒，不行就等凉了再焊。</p>
+                <p>最后换了一块新板子，先在废板子上练了半小时，手稳了再焊正式项目。</p>
+            </div>
+        </section>
 
-    <!-- 7. 中期创客项目 -->
-    <section id="mid">
-        <h2>7. 中期创客项目</h2>
-        <p><strong>项目名称：</strong>智能垃圾桶 / 自动浇花系统 / 等等</p>
-        <p><strong>团队成员：</strong>张三、李四、王五</p>
-        <p><strong>项目介绍：</strong>做一款能...的产品，解决了...问题。</p>
-        <p><strong>我的分工：</strong>负责代码编写和电路连接</p>
-        <p><strong>制作过程：</strong></p>
-        <ol>
-            <li>需求分析：确定功能需求</li>
-            <li>方案设计：选择传感器和执行器</li>
-            <li>原型搭建：用面包板测试电路</li>
-            <li>代码编写：实现核心功能</li>
-            <li>外壳设计：3D打印外壳</li>
-            <li>整机调试：解决bug</li>
-        </ol>
-        <p><strong>遇到的问题及解决：</strong>舵机抖动 → 外接独立电源供电，问题解决。</p>
-        <!-- TODO: 放项目照片或演示视频 -->
-    </section>
+        <!-- 7. 中期项目 -->
+        <section class="page" data-index="7">
+            <div class="page-inner">
+                <h2>7. 中期创客项目</h2>
+                <p><strong>项目名称：</strong>8*8点阵表情轮播呼吸灯</p>
+                <p><strong>团队成员：</strong>李露、吴桐</p>
+                <p><strong>项目介绍：</strong>一款8*8点阵表情轮播呼吸灯，能展现有趣的各种表情。</p>
+                <p><strong>我的分工：</strong>3D模型的建立及模型的产出</p>
+                <img src="../images/3D模型.jpg" alt="3D模型" class="img-fluid">
+                <p><strong>制作过程：</strong></p>
+                <ol>
+                    <li><strong>需求分析：</strong>想做一个小灯牌，能轮流显示不同表情，灯光要有呼吸效果。</li>
+                    <li><strong>方案设计：</strong>用WS2812灯珠做8x8灯板，Arduino Nano做主控。</li>
+                    <li><strong>原型搭建：</strong>先用面包板测试，成功后再扩展到整个灯板。</li>
+                    <li><strong>代码编写：</strong>用FastLED库驱动，用millis()实现呼吸效果。</li>
+                    <li><strong>外壳设计：</strong>用SolidWorks画方形外壳，3D打印出来。</li>
+                    <li><strong>整机调试：</strong>补焊虚焊灯珠，调整渐变曲线。</li>
+                </ol>
+                <p><strong>💡 踩到的坑及解决：</strong></p>
+                <ul>
+                    <li><strong>问题：</strong>呼吸效果用delay()写，切换表情时会卡顿。<br><strong>解决：</strong>改用millis()非阻塞定时。</li>
+                    <li><strong>问题：</strong>外壳打印出来尺寸不对，盖子盖不上。<br>
+                    <img src="../images/外壳.jpg" alt="外壳尺寸问题" style="max-width: 280px; border-radius: 20px; margin: 12px 0;"><br>
+                    <strong>解决：</strong>预留2mm空隙，重新打印。</li>
+                </ul>
+            </div>
+        </section>
 
-    <!-- 8. PCB设计 -->
-    <section id="pcb">
-        <h2>8. PCB设计</h2>
-        <p><strong>设计软件：</strong>立创EDA / Altium Designer</p>
-        <p><strong>练习内容：</strong>设计了一个LED灯板 / 传感器转接板</p>
-        <p><strong>PCB设计流程：</strong></p>
-        <ol>
-            <li>绘制原理图，连接元件引脚</li>
-            <li>检查电气规则（ERC）</li>
-            <li>导入到PCB设计界面</li>
-            <li>布局元件，按功能分区</li>
-            <li>布线（先走电源线，再走信号线）</li>
-            <li>添加泪滴、铺铜</li>
-            <li>生成Gerber文件，发厂家打样</li>
-        </ol>
-        <!-- TODO: 放原理图和PCB设计截图 -->
-        <!-- <img src="../images/pcb-schematic.png" alt="原理图"> -->
-        <!-- <img src="../images/pcb-layout.png" alt="PCB布局"> -->
-    </section>
+        <!-- 8. PCB设计 -->
+        <section class="page" data-index="8">
+            <div class="page-inner">
+                <h2>8. PCB设计</h2>
+                <p><strong>设计软件：</strong>嘉立创EDA</p>
+                <p><strong>练习内容：</strong>设计了一个异形LED电子徽章</p>
+                <p><strong>PCB设计流程：</strong></p>
+                <ol>
+                    <li>绘制原理图，连接元件引脚</li>
+                    <img src="../images/原理图1.jpg" alt="原理图截图" class="img-fluid">
+                    <li>检查电气规则（ERC）</li>
+                    <li>导入到PCB设计界面</li>
+                    <li>布局元件，按功能分区</li>
+                    <li>布线（先走电源线，再走信号线）</li>
+                    <li>添加泪滴、铺铜</li>
+                </ol>
+                <p><strong>PCB布局图：</strong></p>
+                <img src="../images/pcb1.png" alt="PCB布局" class="img-fluid">
+                <p><strong>3D PCB效果图：</strong></p>
+                <img src="../images/3Dpcb1.png" alt="3D PCB效果图" class="img-fluid">
+            </div>
+        </section>
 
-    <!-- 9. 设计思维 -->
-    <section id="design">
-        <h2>9. 设计思维</h2>
-        <p><strong>设计思维的五个阶段：</strong></p>
-        <ol>
-            <li><strong>共情（Empathize）：</strong>观察用户，了解需求</li>
-            <li><strong>定义（Define）：</strong>明确要解决的问题</li>
-            <li><strong>构思（Ideate）：</strong>头脑风暴，产生创意</li>
-            <li><strong>原型（Prototype）：</strong>快速做出原型</li>
-            <li><strong>测试（Test）：</strong>让用户测试，收集反馈迭代</li>
-        </ol>
-        <p><strong>我的练习：</strong>针对“宿舍生活不方便”的问题，进行用户访谈，发现“床上关灯不方便”的需求，设计了一个床头灯控制器。</p>
-        <!-- TODO: 放用户旅程地图或头脑风暴照片 -->
-    </section>
+        <!-- 9. 设计思维 -->
+        <section class="page" data-index="9">
+            <div class="page-inner">
+                <h2>9. 设计思维</h2>
+                <p><strong>设计思维的五个阶段：</strong></p>
+                <ol>
+                    <li><strong>共情：</strong>观察用户，了解需求</li>
+                    <li><strong>定义：</strong>明确要解决的问题</li>
+                    <li><strong>构思：</strong>头脑风暴，产生创意</li>
+                    <li><strong>原型：</strong>快速做出原型</li>
+                    <li><strong>测试：</strong>让用户测试，收集反馈迭代</li>
+                </ol>
+                <p><strong>我的练习：</strong>针对"宿舍生活不方便"的问题，进行小组讨论，发现"床上关灯不方便"是高频痛点，基于此设计了一个床头灯控制器。</p>
+            </div>
+        </section>
 
-    <!-- 10. 期末创新项目 -->
-    <section id="final">
-        <h2>10. 期末创新项目</h2>
-        <p><strong>项目名称：</strong>______（你的项目名称）</p>
-        <p><strong>团队成员：</strong>张三、李四、王五</p>
-        <p><strong>项目背景：</strong>为什么要做这个项目？解决了什么痛点？</p>
-        <p><strong>功能介绍：</strong></p>
-        <ul>
-            <li>功能1：...</li>
-            <li>功能2：...</li>
-            <li>功能3：...</li>
-        </ul>
-        <p><strong>技术方案：</strong></p>
-        <ul>
-            <li>主控芯片：ESP32 / Arduino / STM32</li>
-            <li>传感器：______</li>
-            <li>执行器：______</li>
-            <li>通信方式：WiFi/蓝牙/串口</li>
-        </ul>
-        <p><strong>成果展示：</strong></p>
-        <!-- TODO: 放项目成品照片和演示视频 -->
-        <p><strong>项目总结与反思：</strong>做得好的地方、可以改进的地方。</p>
-    </section>
+        <!-- 10. 期末项目 -->
+        <section class="page" data-index="10">
+            <div class="page-inner">
+                <h2>10. 期末创新项目</h2>
+                <p><strong>项目名称：</strong>智能床头灯（暂定）</p>
+                <p><strong>团队成员：</strong>李露、吴桐</p>
+                <p><strong>项目背景：</strong>解决宿舍床上关灯不方便、缺乏氛围感的问题。</p>
+                <p><strong>功能介绍：</strong></p>
+                <ul>
+                    <li>触摸/语音控制开关</li>
+                    <li>亮度无极调节 + 色温切换</li>
+                    <li>定时关灯 / 小夜灯模式</li>
+                </ul>
+                <p><strong>技术方案：</strong></p>
+                <ul>
+                    <li>主控芯片：ESP32</li>
+                    <li>传感器：触摸感应 / 麦克风模块</li>
+                    <li>执行器：PWM调光LED</li>
+                    <li>通信方式：蓝牙（手机控制）</li>
+                </ul>
+                <p><strong>项目总结与反思：</strong>设计过程中遇到供电发热问题，后期会增加散热和外壳通风。整体实现了远程控制 + 氛围感，后续可增加环境光自适应功能。</p>
+                <p style="margin-top: 24px; text-align: center; color: #94a3b8;">📅 最后更新：2026年5月30日 | 持续更新中 ✨</p>
+            </div>
+        </section>
 
-    <footer style="text-align: center; padding: 20px; color: #7f8c8d;">
-        <p>📅 最后更新：2026年5月30日 | 持续更新中...</p>
-    </footer>
+    </div>
+</div>
+
+<div class="page-footer-bar">
+    <div class="page-indicator"><span id="currentPage">1</span> / <span id="totalPages">11</span></div>
+    <div class="progress-dots" id="progressDots"></div>
+    <div class="footer-text">← → 键翻页 · 点击图片放大</div>
+</div>
+
+<div class="page-flash" id="pageFlash"></div>
+
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">✕</button>
+    <img id="lightboxImg" src="" alt="">
+</div>
+
+<script>
+(function () {
+    const pages = document.querySelectorAll('.page');
+    const navLinks = document.querySelectorAll('#navLinks a');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const currentPageEl = document.getElementById('currentPage');
+    const totalPagesEl = document.getElementById('totalPages');
+    const progressDots = document.getElementById('progressDots');
+    const pageFlash = document.getElementById('pageFlash');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    const total = pages.length;
+    let current = 0;
+    let isAnimating = false;
+
+    totalPagesEl.textContent = total;
+
+    // 生成进度圆点
+    for (let i = 0; i < total; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', '第 ' + (i + 1) + ' 页');
+        dot.addEventListener('click', () => goTo(i));
+        progressDots.appendChild(dot);
+    }
+    const dots = progressDots.querySelectorAll('.dot');
+
+    function updateUI() {
+        currentPageEl.textContent = current + 1;
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === total - 1;
+
+        navLinks.forEach(link => {
+            const idx = parseInt(link.dataset.page, 10);
+            link.classList.toggle('active', idx === current);
+        });
+
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === current);
+        });
+
+        // 自动滚动导航到当前项
+        const activeLink = navLinks[current];
+        if (activeLink) {
+            activeLink.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+    }
+
+    function goTo(index, direction) {
+        if (isAnimating || index === current || index < 0 || index >= total) return;
+
+        isAnimating = true;
+        const dir = direction || (index > current ? 1 : -1);
+        const oldPage = pages[current];
+        const newPage = pages[index];
+
+        // 离开动画
+        oldPage.classList.remove('active');
+        oldPage.classList.add(dir > 0 ? 'leaving-left' : 'leaving-right');
+
+        // 进入动画
+        newPage.classList.add(dir > 0 ? 'entering-from-right' : 'entering-from-left');
+        newPage.style.opacity = '0';
+
+        // 微闪效果
+        pageFlash.classList.add('flash');
+        setTimeout(() => pageFlash.classList.remove('flash'), 150);
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                newPage.classList.remove('entering-from-right', 'entering-from-left');
+                newPage.classList.add('active');
+                newPage.style.opacity = '';
+
+                // 重置旧页滚动位置
+                const oldInner = oldPage.querySelector('.page-inner');
+                if (oldInner) oldInner.scrollTop = 0;
+
+                current = index;
+                updateUI();
+
+                setTimeout(() => {
+                    oldPage.classList.remove('leaving-left', 'leaving-right');
+                    isAnimating = false;
+                }, 650);
+            });
+        });
+    }
+
+    function next() { goTo(current + 1, 1); }
+    function prev() { goTo(current - 1, -1); }
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+
+    const heroStartBtn = document.getElementById('heroStartBtn');
+    if (heroStartBtn) heroStartBtn.addEventListener('click', next);
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            goTo(parseInt(link.dataset.page, 10));
+        });
+    });
+
+    // 键盘导航
+    document.addEventListener('keydown', e => {
+        if (lightbox.classList.contains('open')) {
+            if (e.key === 'Escape') closeLightbox();
+            return;
+        }
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+            e.preventDefault();
+            next();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            prev();
+        } else if (e.key === 'Home') {
+            goTo(0);
+        } else if (e.key === 'End') {
+            goTo(total - 1);
+        }
+    });
+
+    // 触摸滑动
+    let touchStartX = 0;
+    let touchStartY = 0;
+    const viewport = document.querySelector('.book-viewport');
+
+    viewport.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', e => {
+        const dx = e.changedTouches[0].screenX - touchStartX;
+        const dy = e.changedTouches[0].screenY - touchStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+            dx < 0 ? next() : prev();
+        }
+    }, { passive: true });
+
+    // 鼠标滚轮翻页
+    let wheelCooldown = false;
+    viewport.addEventListener('wheel', e => {
+        const inner = pages[current].querySelector('.page-inner');
+        const canScroll = inner && inner.scrollHeight > inner.clientHeight;
+        if (canScroll) {
+            const atTop = inner.scrollTop <= 0;
+            const atBottom = inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 2;
+            if (e.deltaY > 0 && !atBottom) return;
+            if (e.deltaY < 0 && !atTop) return;
+        }
+        if (wheelCooldown) return;
+        wheelCooldown = true;
+        setTimeout(() => wheelCooldown = false, 800);
+        e.deltaY > 0 ? next() : prev();
+    }, { passive: true });
+
+    // 图片灯箱
+    document.querySelectorAll('.img-fluid').forEach(img => {
+        img.addEventListener('click', () => {
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+            lightbox.classList.add('open');
+        });
+    });
+
+    function closeLightbox() {
+        lightbox.classList.remove('open');
+    }
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', e => {
+        if (e.target === lightbox) closeLightbox();
+    });
+
+    updateUI();
+})();
+</script>
 </body>
 </html>

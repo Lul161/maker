@@ -9,7 +9,7 @@
 
 本仓库是我的创客课程学习日志，记录了从零到一学习创客技能的全过程。
 
-在线预览: \https://lul161.github.io/maker/html/
+在线预览: https://lul161.github.io/maker/HTML/index.html
 
 📚 内容板块
 
@@ -71,5 +71,5 @@
 
  📌 查看方式
 
-访问：https://lul161.github.io/maker/html/
+访问：https://lul161.github.io/maker/HTML/index.html
 

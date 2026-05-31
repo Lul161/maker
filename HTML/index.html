@@ -821,10 +821,10 @@ git config --global user.email "你的邮箱"</code></pre>
             </div>
         </section>
 
-        <!-- 6. 嵌入式计算 -->
+        <!-- 6. 嵌入式-->
         <section class="page" data-index="6">
             <div class="page-inner">
-                <h2>6. 嵌入式计算</h2>
+                <h2>6. 嵌入式</h2>
                 <p><strong>开发板：</strong> ESP32</p>
                 <p><strong>练习项目：</strong>舵机控制 / LED灯控制</p>
                 <p><strong>示例代码：</strong>控制舵机摆动</p>
@@ -862,15 +862,14 @@ void loop() {
                 <p><strong>我的分工：</strong>3D模型的建立及模型的产出</p>
                 <img src="../images/3D模型.jpg" alt="3D模型" class="img-fluid">
                 <p><strong>制作过程：</strong></p>
-                <ol>
-                    <li><strong>需求分析：</strong>想做一个小灯牌，能轮流显示不同表情，灯光要有呼吸效果。</li>
-                    <li><strong>方案设计：</strong>用WS2812灯珠做8x8灯板，Arduino Nano做主控。</li>
-                    <li><strong>原型搭建：</strong>先用面包板测试，成功后再扩展到整个灯板。</li>
-                    <li><strong>代码编写：</strong>用FastLED库驱动，用millis()实现呼吸效果。</li>
-                    <li><strong>外壳设计：</strong>用SolidWorks画方形外壳，3D打印出来。</li>
-                    <li><strong>整机调试：</strong>补焊虚焊灯珠，调整渐变曲线。</li>
-                </ol>
-<p><strong>核心代码（驱动8x8点阵 + 呼吸效果）：</strong></p>
+               <ol>
+    <li><strong>需求分析：</strong>想做一个小灯牌，能轮流显示不同表情（笑脸、爱心、眨眼、哭脸等），灯光要有呼吸效果（渐亮渐暗循环）。</li>
+    <li><strong>方案设计：</strong>用 FC-16 型号的 8x8 LED 点阵模块（MAX7219 驱动芯片），ESP32-C3 做主控，通过 MD_MAX72xx 库控制显示，SPI 通信。</li>
+    <li><strong>原型搭建：</strong>先连接单块点阵模块测试显示单个图案，确认 SPI 通信正常后，再扩展图案库和呼吸逻辑。</li>
+    <li><strong>代码编写：</strong>用 MD_MAX72xx 库驱动点阵，定义 12 组 8x8 像素图案（表情 + 图标），用 for 循环控制亮度寄存器实现呼吸效果，切换图案间加短暂延时。</li>
+    <li><strong>外壳设计：</strong>用 SolidWorks 画方形外壳，正面开窗露出点阵屏幕，背面留出主控板固定位和供电口，3D 打印出来。</li>
+    <li><strong>整机调试：</strong>调整 MIN_BRIGHTNESS 和 MAX_BRIGHTNESS 优化呼吸范围，修改 BREATH_DELAY 控制呼吸速度，确保图案切换流畅无闪烁。</li>
+</ol><p><strong>核心代码（驱动8x8点阵 + 呼吸效果）：</strong></p>
 <pre><code>#include &lt;MD_MAX72xx.h&gt;
 #include &lt;SPI.h&gt;
 
@@ -1016,6 +1015,10 @@ void breathEffect(int times) {
                 <p><strong>💡 踩到的坑及解决：</strong></p>
                 <ul>
                     <li><strong>问题：</strong>呼吸效果用delay()写，切换表情时会卡顿。<br><strong>解决：</strong>改用millis()非阻塞定时。</li>
+<li><strong>问题：</strong>3D打印尺寸没设计好，东西放不进去。<br>
+    <img src="../images/中期.png" alt="初次3D打印设计图" style="max-width: 280px; border-radius: 20px; margin: 12px 0;"><br>
+    <strong>解决：</strong>用热熔胶在四周固定，同时留出散热缝隙。</li>
+
                     <li><strong>问题：</strong>外壳打印出来尺寸不对，盖子盖不上。<br>
                     <img src="../images/外壳.jpg" alt="外壳尺寸问题" style="max-width: 280px; border-radius: 20px; margin: 12px 0;"><br>
                     <strong>解决：</strong>预留2mm空隙，重新打印。</li>
@@ -1121,10 +1124,16 @@ void breathEffect(int times) {
         
         <p><strong>💡 踩坑记录：</strong></p>
         <ul>
-            <li><strong>问题1：</strong>传感器读数固定不变 → <strong>原因：</strong>传感器探头内部线路断路 → <strong>解决：</strong>更换全新传感器后数据正常。</li>
-            <li><strong>问题2：</strong>TFT彩屏黑屏无法启动 → <strong>原因：</strong>ESP32-C3 硬件 SPI 引脚与彩屏模块不兼容 → <strong>解决：</strong>改用软件 SPI 驱动，屏幕成功点亮。</li>
-            <li><strong>问题3：</strong>湿度数据波动跳变 → <strong>解决：</strong>增加滤波电容 + 代码中加入多次采样取平均值 + 软件防抖逻辑。</li>
-            <li><strong>问题4：</strong>手机无法访问网页端 → <strong>原因：</strong>路由器开启 AP 隔离功能 → <strong>解决：</strong>关闭 AP 隔离，或使用手机热点测试。</li>
+            <li><strong>问题：</strong>传感器读数固定不变 → <strong>原因：</strong>传感器探头内部线路断路 → <strong>解决：</strong>更换全新传感器后数据正常。</li>
+            <li><strong>问题：</strong>TFT彩屏黑屏无法启动 → <strong>原因：</strong>ESP32-C3 硬件 SPI 引脚与彩屏模块不兼容 → <strong>解决：</strong>改用软件 SPI 驱动，屏幕成功点亮。</li>
+            <li><strong>问题：</strong>湿度数据波动跳变 → <strong>解决：</strong>增加滤波电容 + 代码中加入多次采样取平均值 + 软件防抖逻辑。</li>
+  <li><strong>问题：</strong>3D打印耗材选错导致打印出残次品 → <strong>解决：</strong>重新选了耗材重新打印。
+ <br>
+    <img src="../images/残次品1.jpg" alt="第一次3D打印残次品" style="max-width: 300px; border-radius: 12px; margin: 10px 0;">
+<br>
+ <img src="../images/残次品2.jpg" alt="第二次3D打印残次品" style="max-width: 300px; border-radius: 12px; margin: 10px 0;">
+</li>
+            
         </ul>
         
         <p><strong>核心代码：</strong></p>

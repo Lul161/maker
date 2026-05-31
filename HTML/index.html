@@ -1017,7 +1017,7 @@ void breathEffect(int times) {
                     <li><strong>问题：</strong>呼吸效果用delay()写，切换表情时会卡顿。<br><strong>解决：</strong>改用millis()非阻塞定时。</li>
 <li><strong>问题：</strong>3D打印尺寸没设计好，东西放不进去。<br>
     <img src="../images/中期.png" alt="初次3D打印设计图" style="max-width: 280px; border-radius: 20px; margin: 12px 0;"><br>
-    <strong>解决：</strong>用热熔胶在四周固定，同时留出散热缝隙。</li>
+    <strong>解决：</strong>重新设计了一个稍微大一点的尺寸。</li>
 
                     <li><strong>问题：</strong>外壳打印出来尺寸不对，盖子盖不上。<br>
                     <img src="../images/外壳.jpg" alt="外壳尺寸问题" style="max-width: 280px; border-radius: 20px; margin: 12px 0;"><br>
@@ -1186,11 +1186,13 @@ void loop() {
     // 网页服务处理
     server.handleClient();
 }</code></pre>
-        
-        <p><strong>成果展示：</strong></p>
-        <!-- TODO: 放项目成品照片 -->
-        <!-- TODO: 放演示视频 -->
-        
+       
+<p><strong>成果展示：</strong></p>
+<div style="display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0;">
+    <img src="../images/项目成品1.jpg" alt="成品照片1" style="width: 32%; border-radius: 12px; object-fit: cover;">
+    <img src="../images/项目成品2.jpg" alt="成品照片2" style="width: 32%; border-radius: 12px; object-fit: cover;">
+    <img src="../images/项目成品3.jpg" alt="成品照片3" style="width: 32%; border-radius: 12px; object-fit: cover;">
+</div>
         <p><strong>做得好的地方：</strong>两天内完成「方案设计-硬件接线-代码开发-3D打印-功能联调-路演准备」全流程；团队分工明确，踩坑记录完整。</p>
         <p><strong>可改进的地方：</strong>引脚规划需前置、关键元件需冗余备料、外壳建模需先量尺寸、打印流程可优化。</p>
         <p><strong>未来扩展方向：</strong>增加OLED显示屏、优化提醒机制、增加蓝牙/APP功能、升级锂电池供电、增加自动浇灌模块、拓展环境监测。</p>
@@ -1358,23 +1360,6 @@ void loop() {
         if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
             dx < 0 ? next() : prev();
         }
-    }, { passive: true });
-
-    // 鼠标滚轮翻页
-    let wheelCooldown = false;
-    viewport.addEventListener('wheel', e => {
-        const inner = pages[current].querySelector('.page-inner');
-        const canScroll = inner && inner.scrollHeight > inner.clientHeight;
-        if (canScroll) {
-            const atTop = inner.scrollTop <= 0;
-            const atBottom = inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 2;
-            if (e.deltaY > 0 && !atBottom) return;
-            if (e.deltaY < 0 && !atTop) return;
-        }
-        if (wheelCooldown) return;
-        wheelCooldown = true;
-        setTimeout(() => wheelCooldown = false, 800);
-        e.deltaY > 0 ? next() : prev();
     }, { passive: true });
 
     // 图片灯箱

@@ -1,37 +1,92 @@
-# maker
-
-#### 介绍
-创客学习日志，从代码到实物
-
-#### 软件架构
-软件架构说明
+\# 🌱 创客学习日志
 
 
-#### 安装教程
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+> 从代码到实物：造你所想
 
 
-#### 特技
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+\## 📖 项目简介
+
+
+
+本仓库是我的创客课程学习日志，记录了从零到一学习创客技能的全过程。
+
+
+
+\*\*在线预览：\*\* https://lul161.github.io/maker/html/
+
+
+
+\## 📚 内容板块
+
+
+
+| 序号 | 板块 |
+
+|:----:|------|
+
+| 1 | 个人简介 |
+
+| 2 | 什么是创客 |
+
+| 3 | Git 学习记录 |
+
+| 4 | 3D设计 \& 3D打印 |
+
+| 5 | 电子焊接 |
+
+| 6 | 嵌入式计算 |
+
+| 7 | 中期创客项目（8x8点阵表情轮播呼吸灯） |
+
+| 8 | PCB设计 |
+
+| 9 | 设计思维 |
+
+| 10 | 期末创新项目（智能土壤湿度监测系统） |
+
+
+
+\## 🛠️ 技术栈
+
+
+
+\- HTML5 + CSS3
+
+\- Git
+
+\- SolidWorks
+
+\- 嘉立创EDA
+
+\- ESP32-C3 / Arduino
+
+
+
+\## 👤 作者
+
+
+
+李露 | 计算机科学与技术专业
+
+
+
+\## 📅 更新记录
+
+
+
+\- 2026.5.31：完成期末项目
+
+\- 2026.5.30：升级交互式网页
+
+\- 2026.5.29：初始化仓库
+
+
+
+\## 📌 查看方式
+
+
+
+访问：https://lul161.github.io/maker/html/
+

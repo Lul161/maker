@@ -1069,7 +1069,7 @@ void breathEffect(int times) {
             </div>
         </section>
 
-        <!-- 10. 期末项目 -->
+     <!-- 10. 期末项目 -->
 <section class="page" data-index="10">
     <div class="page-inner">
         <h2>10. 期末创新项目</h2>
@@ -1088,8 +1088,84 @@ void breathEffect(int times) {
             <li><strong>刘知行</strong>（测试/文档）：功能测试、演示准备、物料协调、拍照记录</li>
             <li><strong>唐宇涵</strong>（组装/调试）：外壳组装、热熔胶固定、走线理线、现场演示</li>
         </ul>
-        
-        <p><strong>硬件清单：</strong></p>
+
+        <hr style="margin: 24px 0; border: 0; border-top: 1px solid #e2e8f0;">
+
+        <h3>📅 Day 1：周六 · 中期展示 & 期末项目启动</h3>
+
+        <p><strong>上午 09:50 - 11:30 · 中期项目展示</strong></p>
+        <ul>
+            <li>顺利完成了8x8点阵表情轮播呼吸灯的展示，现场演示了12组表情轮播 + 呼吸灯效果。</li>
+            <li>老师和同学反馈：表情丰富、呼吸效果自然，外壳设计可以再做薄一些。</li>
+            <li>之后进入期末项目环节，团队讨论确定了「智能土壤湿度监测系统」方向。</li>
+        </ul>
+
+        <p><strong>中午 11:30 - 13:00 · 午休</strong></p>
+
+        <p><strong>下午 13:00 - 16:00 · 3D打印外壳设计</strong></p>
+        <ul>
+            <li>用 SolidWorks 开始设计外壳，根据土壤湿度传感器、ESP32-C3、TFT彩屏、蜂鸣器的尺寸进行建模。</li>
+            <li><strong>遇到的问题：</strong>第一次建模时只考虑了元件本身的尺寸，没有预留走线空间和组装公差。</li>
+            <li><strong>解决：</strong>重新测量所有元件实际尺寸，每边增加2mm余量，并加入走线槽和固定孔位。</li>
+            <li>外壳设计完成后导出STL文件，切片后开始3D打印（Bambu Lab打印机，PLA材料）。</li>
+            <li><strong>第一次打印结果：</strong>外壳尺寸偏紧，盖子盖不上，需要返工调整。</li>
+        </ul>
+
+        <p><strong>下午 16:00 - 18:00 · 软件代码开发</strong></p>
+        <ul>
+            <li>编写ESP32-C3代码：实现土壤湿度传感器数据读取、TFT彩屏显示、WiFi连接、WebServer搭建。</li>
+            <li>完成基础框架：传感器模拟值可读取并换算为百分比湿度，屏幕可显示数值。</li>
+            <li><strong>遇到的问题：</strong>传感器读数固定不变，无论沾水还是擦干都没变化。</li>
+            <li><strong>解决：</strong>排查发现传感器探头内部断路，更换新传感器后恢复正常。</li>
+        </ul>
+
+        <p><strong>晚上 19:00 - 21:30 · 软硬件联调 & 踩坑记录</strong></p>
+        <ul>
+            <li>将代码烧录到ESP32-C3，连接传感器、屏幕、蜂鸣器进行联调。</li>
+            <li><strong>遇到的问题：</strong>TFT彩屏黑屏无法点亮。</li>
+            <li><strong>解决：</strong>排查发现ESP32-C3硬件SPI引脚与彩屏模块不兼容，改用软件SPI驱动后屏幕成功点亮。</li>
+            <li><strong>遇到的问题：</strong>湿度数据波动跳变严重，频繁误触发报警。</li>
+            <li><strong>解决：</strong>在传感器模拟输出引脚增加滤波电容，代码中加入多次采样取平均值 + 软件防抖逻辑。</li>
+            <li>21:30实验室闭门前，核心功能跑通：传感器读取、屏幕显示、报警触发均正常工作，但整体还是散装结构（面包板+飞线）。</li>
+            <li>更新HTML日志，记录今日踩坑和Bug。</li>
+        </ul>
+
+        <hr style="margin: 24px 0; border: 0; border-top: 1px solid #e2e8f0;">
+
+        <h3>📅 Day 2：周日 · 封装与完成</h3>
+
+        <p><strong>上午 09:00 - 11:00 · 3D打印返工与组装</strong></p>
+        <ul>
+            <li>调整外壳设计：重新测量所有元件实际尺寸，每边预留2mm空隙，增加走线槽和固定孔位。</li>
+            <li>第二次3D打印后外壳完美贴合，所有元件可顺利装入。</li>
+            <li>用热熔胶固定内部线路，整理走线，确保外观整洁、无短路风险。</li>
+            <li><strong>遇到的问题：</strong>第一次耗材选错，打印出残次品。</li>
+            <li><strong>解决：</strong>重新选用PLA Plus耗材，打印质量明显提升。</li>
+            <br>
+            <img src="../images/残次品1.jpg" alt="第一次3D打印残次品" style="max-width: 300px; border-radius: 12px; margin: 10px 0;">
+            <br>
+            <img src="../images/残次品2.jpg" alt="第二次3D打印成品" style="max-width: 300px; border-radius: 12px; margin: 10px 0;">
+        </ul>
+
+        <p><strong>上午 11:00 - 12:00 · HTML日志最终完善与封箱</strong></p>
+        <ul>
+            <li>完成HTML日志最终上线：包含项目简介、团队成员、硬件清单、引脚分配表、接线要点、核心代码、踩坑记录、成果展示。</li>
+            <li>12:00截止一切开发与制作，封存作品，提交HTML日志链接。</li>
+        </ul>
+
+        <hr style="margin: 24px 0; border: 0; border-top: 1px solid #e2e8f0;">
+
+        <h3>✅ 项目完成精度总结</h3>
+        <ul>
+            <li><strong>代码完成度：</strong>100%。实现了湿度采集、滑动平均滤波、WiFi连接、WebServer、阈值调节、蜂鸣器报警、屏幕显示等全部功能。</li>
+            <li><strong>硬件完成度：</strong>100%。所有模块集成进3D打印外壳，内部走线整理完毕，供电稳定。</li>
+            <li><strong>网页完成度：</strong>100%。手机/电脑均可访问，支持实时数据查看、阈值设置、报警关闭。</li>
+            <li><strong>HTML日志完成度：</strong>100%。包含全部10个板块，GitHub Pages可直接访问。</li>
+        </ul>
+
+        <hr style="margin: 24px 0; border: 0; border-top: 1px solid #e2e8f0;">
+
+        <h3>🔧 硬件清单</h3>
         <ul>
             <li>主控板：ESP32-C3 SuperMini ×1</li>
             <li>TFT 彩屏：ST7735 1.8寸 SPI ×1</li>
@@ -1120,20 +1196,6 @@ void breathEffect(int times) {
             <li>TFT 彩屏、土壤湿度传感器统一接入 5V 供电，3.3V 供电易出现工作异常。</li>
             <li>所有模块的 GND 引脚必须与 ESP32-C3 共地，避免信号漂移。</li>
             <li>彩屏 SCLK、MOSI 引脚严格按照定义接线，接反会导致屏幕无法点亮。</li>
-        </ul>
-        
-        <p><strong>💡 踩坑记录：</strong></p>
-        <ul>
-            <li><strong>问题：</strong>传感器读数固定不变 → <strong>原因：</strong>传感器探头内部线路断路 → <strong>解决：</strong>更换全新传感器后数据正常。</li>
-            <li><strong>问题：</strong>TFT彩屏黑屏无法启动 → <strong>原因：</strong>ESP32-C3 硬件 SPI 引脚与彩屏模块不兼容 → <strong>解决：</strong>改用软件 SPI 驱动，屏幕成功点亮。</li>
-            <li><strong>问题：</strong>湿度数据波动跳变 → <strong>解决：</strong>增加滤波电容 + 代码中加入多次采样取平均值 + 软件防抖逻辑。</li>
-  <li><strong>问题：</strong>3D打印耗材选错导致打印出残次品 → <strong>解决：</strong>重新选了耗材重新打印。
- <br>
-    <img src="../images/残次品1.jpg" alt="第一次3D打印残次品" style="max-width: 300px; border-radius: 12px; margin: 10px 0;">
-<br>
- <img src="../images/残次品2.jpg" alt="第二次3D打印残次品" style="max-width: 300px; border-radius: 12px; margin: 10px 0;">
-</li>
-            
         </ul>
         
         <p><strong>核心代码：</strong></p>
@@ -1187,20 +1249,20 @@ void loop() {
     server.handleClient();
 }</code></pre>
        
-<p><strong>成果展示：</strong></p>
-<div style="display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0;">
-    <img src="../images/项目成品1.jpg" alt="成品照片1" style="width: 32%; border-radius: 12px; object-fit: cover;">
-    <img src="../images/项目成品2.jpg" alt="成品照片2" style="width: 32%; border-radius: 12px; object-fit: cover;">
-    <img src="../images/项目成品3.jpg" alt="成品照片3" style="width: 32%; border-radius: 12px; object-fit: cover;">
-</div>
-        <p><strong>做得好的地方：</strong>两天内完成「方案设计-硬件接线-代码开发-3D打印-功能联调-路演准备」全流程；团队分工明确，踩坑记录完整。</p>
+        <p><strong>成果展示：</strong></p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0;">
+            <img src="../images/项目成品1.jpg" alt="成品照片1" style="width: 32%; border-radius: 12px; object-fit: cover;">
+            <img src="../images/项目成品2.jpg" alt="成品照片2" style="width: 32%; border-radius: 12px; object-fit: cover;">
+            <img src="../images/项目成品3.jpg" alt="成品照片3" style="width: 32%; border-radius: 12px; object-fit: cover;">
+        </div>
+        
+        <p><strong>做得好的地方：</strong>两天内完成「方案设计-硬件接线-代码开发-3D打印-功能联调」全流程；团队分工明确，踩坑记录完整。</p>
         <p><strong>可改进的地方：</strong>引脚规划需前置、关键元件需冗余备料、外壳建模需先量尺寸、打印流程可优化。</p>
         <p><strong>未来扩展方向：</strong>增加OLED显示屏、优化提醒机制、增加蓝牙/APP功能、升级锂电池供电、增加自动浇灌模块、拓展环境监测。</p>
   
-          <p style="margin-top: 24px; text-align: center; color: #94a3b8;">📅 最后更新：2026年5月30日 | 持续更新中 ✨</p>
-            </div>
-        </section>
-
+        <p style="margin-top: 24px; text-align: center; color: #94a3b8;">📅 最后更新：2026年5月31日 | 持续更新中 ✨</p>
+    </div>
+</section>
     </div>
 </div>
 
